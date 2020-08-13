@@ -51,7 +51,7 @@
         z-index: 1;
         font-size: 18px;
         counter-increment: leaderboard;
-        padding: 18px 10px 18px 50px;
+        padding: 18px 18px 18px 50px;
         backface-visibility: hidden;
         transform: translateZ(0) scale(1, 1);
       }
@@ -118,57 +118,31 @@
         transition: all 0.3s ease-in-out;
         opacity: 0;
       }
-      .leaderboard ol li:nth-child(1) {
+      .leaderboard ol li:nth-child(odd) {
         background: #1f4476;
       }
-      .leaderboard ol li:nth-child(1)::after {
+      .leaderboard ol li:nth-child(odd)::after {
         background: #1f4476;
       }
-      .leaderboard ol li:nth-child(2) {
+      .leaderboard ol li:nth-child(even) {
         background: #2b61aa;
       }
-      .leaderboard ol li:nth-child(2)::after {
+      .leaderboard ol li:nth-child(even)::after {
         background: #2b61aa;
         box-shadow: 0 2px 0 rgba(0, 0, 0, .08);
       }
-      .leaderboard ol li:nth-child(2) mark::before, .leaderboard ol li:nth-child(2) mark::after {
+      .leaderboard ol li:nth-child(even) mark::before, .leaderboard ol li:nth-child(2) mark::after {
         border-top: 6px solid #1e4578;
         bottom: -7px;
       }
-      .leaderboard ol li:nth-child(3) {
-        background: #1f4476;
-      }
-      .leaderboard ol li:nth-child(3)::after {
-        background: #1f4476;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, .11);
-      }
-      .leaderboard ol li:nth-child(3) mark::before, .leaderboard ol li:nth-child(3) mark::after {
-        border-top: 2px solid #112642;
-        bottom: -3px;
-      }
-      .leaderboard ol li:nth-child(4) {
-        background: #2b61aa;
-      }
-      .leaderboard ol li:nth-child(4)::after {
-        background: #2b61aa;
-        box-shadow: 0 -1px 0 rgba(0, 0, 0, .15);
-      }
-      .leaderboard ol li:nth-child(4) mark::before, .leaderboard ol li:nth-child(4) mark::after {
-        top: -7px;
-        bottom: auto;
-        border-top: none;
-        border-bottom: 6px solid #1e4578;
-      }
-     .leaderboard ol li:nth-child(5) {
-        background: #1f4476;
+     .leaderboard ol li:last-child {
         border-radius: 0 0 10px 10px;
       }
-      .leaderboard ol li:nth-child(5)::after {
-        background: #1f4476;
+      .leaderboard ol li:last-child::after {
         box-shadow: 0 -2.5px 0 rgba(0, 0, 0, .12);
         border-radius: 0 0 10px 10px;
       }
-      .leaderboard ol li:nth-child(5) mark::before, .leaderboard ol li:nth-child(5) mark::after {
+      .leaderboard ol li:last-child mark::before, .leaderboard ol li:last-child mark::after {
         top: -9px;
         bottom: auto;
         border-top: none;
@@ -221,27 +195,7 @@
       <h1>
         HIGH SCORES
       </h1>
-      <ol>
-        <li>
-          <mark id="name0"></mark>
-          <small id="score0"></small>
-        </li>
-        <li>
-          <mark id="name1"></mark>
-          <small id="score1"></small>
-        </li>
-        <li>
-          <mark id="name2"></mark>
-          <small id="score2"></small>
-        </li>
-        <li>
-          <mark id="name3"></mark>
-          <small id="score3"></small>
-        </li>
-        <li>
-          <mark id="name4"></mark>
-          <small id="score4"></small>
-        </li>
+      <ol id="list">
       </ol>
     </div>
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq0xUuGqcft9YIZvJA0Xxub4cIxZpZIzo9iHvkRnrlrGw6hg/viewform?usp=sf_link" class="button" target="_blank">Submit New Score</a>
@@ -255,14 +209,15 @@
     }
     var json_obj = JSON.parse(Get("https://spreadsheets.google.com/feeds/cells/1QoQYbMTAVKU6EVu0c9liO9eXwpUnRPgSX7AiFDid6wU/1/public/full?alt=json"));
     var starting_index = 7;
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 5; i++) {
       var result = {
         name: (json_obj.feed.entry[starting_index + i * 4].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4].content.$t : "blank"),
         score: (json_obj.feed.entry[starting_index + i * 4 + 1].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4 + 1].content.$t : "blank"),
         date: (json_obj.feed.entry[starting_index + i * 4 - 1].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4 - 1].content.$t : "blank")
       }
-      document.getElementById("name" + i).innerHTML = result.name + ' <span style="font-size: 0.7rem;">(' + result.date + ')</span>';
-      document.getElementById("score" + i).innerHTML = result.score;
+      if (result.name != "blank") {
+        document.getElementById("list").innerHTML += '<li><mark>' + result.name + ' <span style="font-size: 0.7rem;">(' + result.date + ')</span></mark><small>' + result.score + '</small></li>';
+      }
     }
   </script>
 </html>
