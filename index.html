@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>High Score</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
     <style>
       /*-------------------- Body --------------------*/
@@ -23,9 +23,19 @@
       .leaderboard {
         margin: 20px auto 0;
         max-width: 350px;
+        background: #e7e6e8;
+        border-radius: 10px;
+        box-shadow: 0 7px 30px rgba(62, 9, 11, .3);
+      }
+      .button {
+        margin: 20px auto 0;
+        max-width: 350px;
         background: #E7E6E8;
         border-radius: 10px;
         box-shadow: 0 7px 30px rgba(62, 9, 11, .3);
+        text-decoration: none;
+        text-align: center;
+        color: #1f4476;
       }
       .leaderboard h1 {
         font-size: 24px;
@@ -220,6 +230,9 @@
           <small id="score4"></small>
         </li>
       </ol>
+    </div>
+    <div class="button">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq0xUuGqcft9YIZvJA0Xxub4cIxZpZIzo9iHvkRnrlrGw6hg/viewform?usp=sf_link" target="_blank">Submit a New Score</a>
     </div>
   </body>
   <script type="text/javascript">
