@@ -208,24 +208,54 @@
     </div>
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq0xUuGqcft9YIZvJA0Xxub4cIxZpZIzo9iHvkRnrlrGw6hg/viewform?usp=sf_link" class="button" target="_blank">Submit New Score</a>
   </body>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
   <script type="text/javascript">
-    function Get(yourUrl) {
-      var Httpreq = new XMLHttpRequest(); // a new request
-      Httpreq.open("GET", yourUrl, false);
-      Httpreq.send(null);
-      return Httpreq.responseText;
+    // function Get(yourUrl) {
+    //   var Httpreq = new XMLHttpRequest(); // a new request
+    //   Httpreq.open("GET", yourUrl, false);
+    //   Httpreq.send(null);
+    //   return Httpreq.responseText;
+    // }
+    // var json_obj = JSON.parse(Get("https://spreadsheets.google.com/feeds/cells/1QoQYbMTAVKU6EVu0c9liO9eXwpUnRPgSX7AiFDid6wU/1/public/full?alt=json"));
+    // var starting_index = 7;
+    // for (i = 0; i < 5; i++) {
+    //   var result = {
+    //     name: (json_obj.feed.entry[starting_index + i * 4].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4].content.$t : "blank"),
+    //     score: (json_obj.feed.entry[starting_index + i * 4 + 1].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4 + 1].content.$t : "blank"),
+    //     date: (json_obj.feed.entry[starting_index + i * 4 - 1].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4 - 1].content.$t : "blank")
+    //   }
+    //   if (result.name != "blank") {
+    //     document.getElementById("list").innerHTML += '<li><mark>' + result.name + ' <span style="font-size: 0.7rem;">(' + result.date + ')</span></mark><small>' + result.score + '</small></li>';
+    //   }
+    // }
+
+    var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTS9wWd--YWmT3gW5R_9_yiPV37vuz2Z3LUqbtlRTapl6eTnBw1UhZfu_DSyDwh9GX8xWu5fuU9HmFW/pub?gid=0&single=true&output=csv';
+
+    function init() {
+      Papa.parse(public_spreadsheet_url, {
+        download: true,
+        header: true,
+        complete: showInfo
+      })
     }
-    var json_obj = JSON.parse(Get("https://spreadsheets.google.com/feeds/cells/1QoQYbMTAVKU6EVu0c9liO9eXwpUnRPgSX7AiFDid6wU/1/public/full?alt=json"));
-    var starting_index = 7;
-    for (i = 0; i < 5; i++) {
-      var result = {
-        name: (json_obj.feed.entry[starting_index + i * 4].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4].content.$t : "blank"),
-        score: (json_obj.feed.entry[starting_index + i * 4 + 1].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4 + 1].content.$t : "blank"),
-        date: (json_obj.feed.entry[starting_index + i * 4 - 1].content.$t != "" ? json_obj.feed.entry[starting_index + i * 4 - 1].content.$t : "blank")
+
+    window.addEventListener('DOMContentLoaded', init)
+
+    function showInfo(results) {
+      var data = results.data;
+      console.log(data);
+      if (data.name != "blank") {
+        document.getElementById("list").innerHTML += '<li><mark>' + data.name + ' <span style="font-size: 0.7rem;">(' + data.timestamp + ')</span></mark><small>' + data.score + '</small></li>';
       }
-      if (result.name != "blank") {
-        document.getElementById("list").innerHTML += '<li><mark>' + result.name + ' <span style="font-size: 0.7rem;">(' + result.date + ')</span></mark><small>' + result.score + '</small></li>';
-      }
+
+      data.forEach(function (item, index) {
+        if (item.name != "blank") {
+          document.getElementById("list").innerHTML += '<li><mark>' + item.name + ' <span style="font-size: 0.7rem;">(' + item.timestamp + ')</span></mark><small>' + item.score + '</small></li>';
+        }
+      });
     }
+
+
+
   </script>
 </html>
